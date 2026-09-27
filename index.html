@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Pocket Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&family=Huninn&display=swap">
+<style>
+:root{
+  --bg:#F2F4F1; --panel:#FFFFFF; --sunk:#E8ECE7; --ink:#18221F; --muted:#5C6964; --line:#D5DCD7;
+  --accent:#0E7A62; --accent-ink:#FFFFFF; --accent-soft:#DCEEE7;
+  --amber:#A96A12; --amber-soft:#F5E7D0; --red:#B3372F; --red-soft:#F6DEDA;
+  --blue:#2F5FAE; --plum:#86407F; --slate:#56656E;
+  --shadow:0 1px 2px rgba(20,40,34,.06),0 8px 24px -12px rgba(20,40,34,.18);
+  --edge:#18221F; --dot:transparent;
+  --f-display:"LXGW WenKai TC","Kaiti TC","STKaiti","KaiTi",serif;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#111615; --panel:#18201E; --sunk:#0C100F; --ink:#E2E9E5; --muted:#93A19B; --line:#2A3431;
+    --accent:#3CC29D; --accent-ink:#06241B; --accent-soft:#15352B;
+    --amber:#E3A04A; --amber-soft:#3A2A14; --red:#EE7A70; --red-soft:#3C1E1B;
+    --blue:#7BA4EA; --plum:#CC8AC8; --slate:#9AAAB2;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px -14px rgba(0,0,0,.6);
+    --edge:#E2E9E5;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#111615; --panel:#18201E; --sunk:#0C100F; --ink:#E2E9E5; --muted:#93A19B; --line:#2A3431;
+  --accent:#3CC29D; --accent-ink:#06241B; --accent-soft:#15352B;
+  --amber:#E3A04A; --amber-soft:#3A2A14; --red:#EE7A70; --red-soft:#3C1E1B;
+  --blue:#7BA4EA; --plum:#CC8AC8; --slate:#9AAAB2;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px -14px rgba(0,0,0,.6);
+  --edge:#E2E9E5;
+}
+
+/* ---------- Cartoon skins (each is one fixed look, same in light and dark) ---------- */
+body[data-skin]{color-scheme:light;--red:#E0383E;--red-soft:#FFD9D6;--blue:#2F7BFF;--plum:#9B4DFF;--slate:#6F6A80;--amber:#E08A00;--amber-soft:#FFEFC2;--panel:#FFFFFF}
+body[data-skin="candy"]{--bg:#FFE6F0;--sunk:#FFF2F7;--ink:#3B1F3A;--muted:#8A5E7F;--line:#E9B9CF;--edge:#3B1F3A;--accent:#FF4F99;--accent-ink:#FFFFFF;--accent-soft:#FFD1E4;--dot:#FFC4DB}
+body[data-skin="ocean"]{--bg:#D9F1FF;--sunk:#EEF8FF;--ink:#0E2A47;--muted:#4B6A8A;--line:#A9D3F0;--edge:#0E2A47;--accent:#1690F5;--accent-ink:#FFFFFF;--accent-soft:#C4E6FF;--dot:#B3DEFF}
+body[data-skin="forest"]{--bg:#E4F5D6;--sunk:#F2FAEA;--ink:#1F3A1C;--muted:#57744F;--line:#BADFA6;--edge:#1F3A1C;--accent:#2E9E3A;--accent-ink:#FFFFFF;--accent-soft:#CDEEBD;--dot:#C6E8AF}
+body[data-skin="orange"]{--bg:#FFEFD3;--sunk:#FFF7E8;--ink:#3D2412;--muted:#86603F;--line:#F3C996;--edge:#3D2412;--accent:#FF7417;--accent-ink:#FFFFFF;--accent-soft:#FFDAB5;--dot:#FFD59E}
+body[data-skin="grape"]{--bg:#ECE3FF;--sunk:#F6F1FF;--ink:#2A1D4A;--muted:#6C5E92;--line:#CDBDF5;--edge:#2A1D4A;--accent:#7B45FF;--accent-ink:#FFFFFF;--accent-soft:#DCCCFF;--dot:#D2C1FF}
+body[data-skin="lemon"]{--bg:#FFF8C9;--sunk:#FFFCE6;--ink:#2F2A10;--muted:#77703F;--line:#EEDF85;--edge:#2F2A10;--accent:#F5B800;--accent-ink:#2F2A10;--accent-soft:#FFEC99;--dot:#FBE88A}
+body[data-skin="night"]{color-scheme:dark;--bg:#1C1E40;--panel:#2A2D63;--sunk:#22255A;--ink:#FFF6D6;--muted:#BAB5E3;--line:#44478A;--edge:#0A0B24;--accent:#FFD23F;--accent-ink:#2A1D00;--accent-soft:#3F3F84;--dot:#2A2D5E;--red:#FF7A80;--red-soft:#4A2440;--blue:#7FB2FF;--plum:#D39BFF;--slate:#A9A6CF;--amber:#FFB547;--amber-soft:#4A3A20}
+
+body.cartoon{font-family:"Huninn",var(--f-body);background-color:var(--bg);background-image:radial-gradient(var(--dot) 2.2px,transparent 2.8px);background-size:24px 24px}
+body.cartoon h1,body.cartoon h2,body.cartoon h3,body.cartoon .brand b,body.cartoon .neditor .ntitle,body.cartoon .tabbar button b{font-family:"Huninn",var(--f-body);font-weight:400;letter-spacing:.02em}
+body.cartoon .vh h1{font-size:34px}
+body.cartoon .side{border-right:3px solid var(--edge)}
+body.cartoon .capture,body.cartoon .pcard,body.cartoon .inbox-item,body.cartoon .tadd,body.cartoon .neditor,body.cartoon .sheet,body.cartoon .todo{border:2.5px solid var(--edge);border-radius:18px;box-shadow:4px 4px 0 var(--edge)}
+body.cartoon .todo{border-left:9px solid var(--p);border-radius:14px}
+body.cartoon .todo[data-p="3"]{--p:var(--accent-soft)}
+body.cartoon .todo.done{border-left-color:var(--line);box-shadow:2px 2px 0 var(--edge)}
+body.cartoon .btn{border:2px solid var(--edge);border-radius:12px;box-shadow:2px 2px 0 var(--edge)}
+body.cartoon .btn.ghost{background:var(--panel)}
+body.cartoon .btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--edge)}
+body.cartoon .btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--edge)}
+body.cartoon .btn.danger[data-armed]{border-color:var(--edge)}
+body.cartoon .chip{border:2px solid var(--edge);color:var(--ink);font-size:14px}
+body.cartoon .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--edge);color:var(--accent-ink)}
+body.cartoon textarea,body.cartoon input:not([type=checkbox]),body.cartoon select{border:2px solid var(--edge);border-radius:12px}
+body.cartoon .capture textarea,body.cartoon .neditor .ntitle,body.cartoon .neditor .nbody{border:0}
+body.cartoon .nmeta{border-bottom:2px dashed var(--line)}
+body.cartoon .pbody{border-radius:12px;border:2px dashed var(--line)}
+body.cartoon .cat{border:1.5px solid var(--edge);border-radius:999px;color:var(--ink)}
+body.cartoon .nitem[aria-current="true"]{border:2px solid var(--edge);box-shadow:3px 3px 0 var(--edge)}
+body.cartoon .nav button[aria-current="page"]{background:var(--accent);color:var(--accent-ink);box-shadow:3px 3px 0 var(--edge);border:2px solid var(--edge)}
+body.cartoon .nav button[aria-current="page"] em{color:var(--accent-ink)}
+body.cartoon .nav button{border:2px solid transparent;border-radius:12px}
+body.cartoon .empty{border:2.5px dashed var(--line);background:var(--panel);border-radius:18px}
+body.cartoon .toast{border:2px solid var(--edge);box-shadow:3px 3px 0 var(--edge);background:var(--accent);color:var(--accent-ink)}
+body.cartoon .tabbar{border-top:3px solid var(--edge)}
+body.cartoon .tabbar button[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
+body.cartoon .tabbar button[aria-current="page"] b{color:var(--accent-ink)}
+@media (prefers-reduced-motion:no-preference){
+  body.cartoon .btn{transition:transform .08s,box-shadow .08s}
+  body.cartoon .mascot{animation:bob 3.2s ease-in-out infinite}
+}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-3px) rotate(3deg)}}
+
+.mascot{display:none;width:44px;height:44px;flex:none}
+body.cartoon .mascot{display:block}
+body.cartoon .mark{display:none}
+.empty .mascot{margin:0 auto 8px;width:56px;height:56px}
+
+.skins{display:flex;flex-wrap:wrap;gap:8px}
+.skin-dot{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0;position:relative;background:var(--sb)}
+.skin-dot::after{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--sa)}
+.skin-dot[aria-pressed="true"]{border:3px solid var(--ink);transform:scale(1.08)}
+.skin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:16px}
+.skin-card{border:2px solid var(--line);border-radius:14px;padding:10px;cursor:pointer;background:var(--sb);color:var(--si);text-align:left;display:flex;flex-direction:column;gap:6px;font-weight:500}
+.skin-card[aria-pressed="true"]{border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.skin-card .bar{height:10px;border-radius:999px;background:var(--sa)}
+.skin-card .bar.s{width:60%;background:var(--ss)}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a{color:var(--accent)}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;text-wrap:balance;margin:0;line-height:1.25}
+
+.app{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100%}
+.side{position:sticky;top:env(safe-area-inset-top,0px);align-self:start;height:100vh;display:flex;flex-direction:column;gap:22px;padding:22px 16px;border-right:1px solid var(--line);background:var(--panel)}
+.brand{display:flex;gap:12px;align-items:center}
+.mark{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font-family:var(--f-display);font-size:22px;font-weight:700}
+.brand b{font-family:var(--f-display);font-size:20px;display:block;line-height:1.2}
+.brand small{color:var(--muted);font-size:12px;letter-spacing:.08em}
+.lbl{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-weight:500}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{display:flex;justify-content:space-between;align-items:center;gap:8px;border:0;background:none;padding:9px 12px;border-radius:8px;cursor:pointer;text-align:left;color:var(--muted);font-weight:500}
+.nav button:hover{background:var(--sunk);color:var(--ink)}
+.nav button[aria-current="page"]{background:var(--accent-soft);color:var(--ink)}
+.nav em{font-style:normal;font-family:var(--f-mono);font-size:12px;font-variant-numeric:tabular-nums;color:var(--muted)}
+.sync{margin-top:auto;font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none}
+.dot.on{background:var(--accent)} .dot.warn{background:var(--amber)}
+
+main{padding-inline:clamp(16px,4vw,48px);padding-block:32px 96px;max-width:1080px;width:100%}
+.vh{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.vh h1{font-size:30px}
+.vh p{margin:4px 0 0;color:var(--muted);max-width:60ch}
+
+textarea,input[type=text],input[type=search],input[type=date],input:not([type]),select{
+  background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 11px;width:100%;min-width:0}
+textarea{resize:vertical;line-height:1.55}
+select{cursor:pointer}
+.btn{border:1px solid var(--line);background:var(--panel);padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:500;white-space:nowrap}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.ghost{background:transparent}
+.btn.sm{padding:4px 10px;font-size:13px}
+.btn.danger{color:var(--red)}
+.btn.danger[data-armed]{background:var(--red);border-color:var(--red);color:var(--panel)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.end{justify-content:flex-end}
+.stack{display:flex;flex-direction:column;gap:10px}
+.empty{color:var(--muted);padding:28px 20px;text-align:center;border:1px dashed var(--line);border-radius:12px}
+
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 18px}
+.chip{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:4px 12px;cursor:pointer;font-size:13px;color:var(--muted);display:inline-flex;gap:6px;align-items:center}
+.chip:hover{color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.chip i{font-style:normal;font-family:var(--f-mono);font-size:11px;opacity:.75}
+.sw{width:9px;height:9px;border-radius:3px;display:inline-block;flex:none}
+
+/* Inbox */
+.capture{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.capture textarea{border:0;padding:4px;background:transparent}
+.capture textarea:focus{outline:none}
+.capture:focus-within{border-color:var(--accent)}
+.hint{font-size:12px;color:var(--muted);margin-right:auto}
+.inbox-item{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px}
+.inbox-item .txt{white-space:pre-wrap;overflow-wrap:anywhere}
+.inbox-item time{font-family:var(--f-mono);font-size:11px;color:var(--muted);grid-column:1}
+.inbox-item .acts{grid-column:2;grid-row:1 / span 2;display:flex;gap:6px;align-items:flex-start;flex-wrap:wrap;justify-content:flex-end;max-width:300px}
+
+/* Prompts */
+.toolbar{display:flex;gap:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.pcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.pcard header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.pcard h3{font-size:17px}
+.cat{font-size:11px;letter-spacing:.06em;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:4px;white-space:nowrap}
+.pbody{font-size:13.5px;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--sunk);border-radius:8px;padding:10px 12px;margin:0;font-family:var(--f-body);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.pcard.open .pbody{display:block}
+.pcard footer{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.star{border:0;background:none;cursor:pointer;font-size:18px;line-height:1;color:var(--line);padding:2px}
+.star[aria-pressed="true"]{color:var(--amber)}
+
+/* Todos */
+.tadd{display:grid;grid-template-columns:minmax(0,1fr) 130px 76px 150px auto;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px}
+.todo{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 12px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;border-left:4px solid var(--p)}
+.todo[data-p="1"]{--p:var(--red)} .todo[data-p="2"]{--p:var(--amber)} .todo[data-p="3"]{--p:var(--line)}
+.todo input[type=checkbox]{width:18px;height:18px;margin-top:3px;accent-color:var(--accent);cursor:pointer}
+.todo .t{cursor:pointer;overflow-wrap:anywhere}
+.todo .meta{grid-column:2;display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.todo .meta span{display:inline-flex;gap:5px;align-items:center}
+.todo .note{grid-column:2;font-size:13px;color:var(--muted);white-space:pre-wrap}
+.todo.done{border-left-color:var(--line);opacity:.62}
+.todo.done .t{text-decoration:line-through}
+.late{color:var(--red)!important;font-weight:500}
+.today{color:var(--accent)!important;font-weight:500}
+details.donebox{margin-top:22px}
+details.donebox summary{cursor:pointer;color:var(--muted);font-size:13px;margin-bottom:10px}
+
+/* Notes */
+.notes{display:grid;grid-template-columns:280px minmax(0,1fr);gap:16px;align-items:start}
+.nlist{display:flex;flex-direction:column;gap:4px;margin-top:10px;max-height:70vh;overflow:auto}
+.nitem{border:1px solid transparent;background:none;text-align:left;padding:9px 11px;border-radius:8px;cursor:pointer;display:flex;flex-direction:column;gap:1px}
+.nitem:hover{background:var(--panel)}
+.nitem[aria-current="true"]{background:var(--panel);border-color:var(--line);box-shadow:var(--shadow)}
+.nitem b{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nitem small{color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nitem .pin{color:var(--amber);font-size:11px}
+.neditor{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;min-height:60vh;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow)}
+.neditor .ntitle{font-family:var(--f-display);font-size:24px;font-weight:700;border:0;padding:0;background:transparent}
+.neditor .ntitle:focus,.neditor .nbody:focus{outline:none}
+.neditor .nbody{flex:1;border:0;padding:0;min-height:48vh;background:transparent;font-size:15.5px;line-height:1.8;resize:none}
+.nmeta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:10px}
+.nmeta input{width:150px;padding:3px 8px;font-size:13px}
+.nmeta time{font-family:var(--f-mono);margin-left:auto}
+.back{display:none}
+
+/* Modal, toast */
+.overlay{position:fixed;inset:0;background:rgba(10,20,17,.45);display:grid;place-items:center;padding:16px;z-index:40}
+.sheet{background:var(--panel);border-radius:14px;padding:22px;width:min(560px,100%);max-height:90vh;overflow:auto;box-shadow:0 24px 60px -20px rgba(0,0,0,.5)}
+.sheet h2{font-size:22px;margin-bottom:14px}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.field span{font-size:12px;color:var(--muted)}
+.lrow{display:grid;grid-template-columns:minmax(0,1fr) 120px auto;gap:8px;margin-bottom:8px}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:999px;font-size:14px;z-index:50}
+.tabbar{display:none}
+
+@media (max-width:820px){
+  .app{grid-template-columns:1fr}
+  .side{display:none}
+  main{padding-block:20px 110px}
+  .vh h1{font-size:25px}
+  .tabbar{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;background:var(--panel);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));z-index:30}
+  .tabbar button{border:0;background:none;padding:6px 2px;border-radius:8px;font-size:12px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer}
+  .tabbar button b{font-family:var(--f-display);font-size:18px;line-height:1.2;color:var(--ink)}
+  .tabbar button[aria-current="page"]{background:var(--accent-soft);color:var(--ink)}
+  .tadd{grid-template-columns:1fr 1fr}
+  .tadd #tText{grid-column:1 / -1}
+  .tadd .btn{grid-column:1 / -1}
+  .inbox-item{grid-template-columns:1fr}
+  .inbox-item .acts{grid-column:1;grid-row:auto;justify-content:flex-start;max-width:none}
+  .notes{grid-template-columns:1fr}
+  .notes.editing .npane{display:none}
+  .notes:not(.editing) .neditor{display:none}
+  .back{display:inline-block}
+  .nlist{max-height:none}
+}
+@media (prefers-reduced-motion:no-preference){
+  .pcard,.todo,.inbox-item{transition:border-color .15s}
+}
+</style>
+
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><span class="mark">P</span><svg class="mascot" viewBox="0 0 40 40" aria-hidden="true"><use href="#blob"/></svg><div><b>Pocket Desk</b><small>收集 · 指令 · 待辦 · 筆記</small></div></div>
+    <form id="qc">
+      <label class="lbl" for="qcIn">快速收集</label>
+      <textarea id="qcIn" rows="2" placeholder="任何嘢，Enter 放入 Inbox"></textarea>
+    </form>
+    <nav class="nav" id="nav">
+      <button data-view="inbox"><span>Inbox 收集箱</span><em id="c-inbox"></em></button>
+      <button data-view="prompts"><span>AI 指令庫</span><em id="c-prompts"></em></button>
+      <button data-view="todos"><span>待辦</span><em id="c-todos"></em></button>
+      <button data-view="notes"><span>筆記</span><em id="c-notes"></em></button>
+    </nav>
+    <div><span class="lbl">主題</span><div class="skins" id="skinRow"></div></div>
+    <div class="sync" id="sync"><span class="dot"></span><span>載入中…</span></div>
+  </aside>
+
+  <main id="main">
+    <section class="view" id="v-inbox">
+      <header class="vh"><div><h1>Inbox 收集箱</h1><p>未整理嘅嘢全部先放呢度。得閒再一鍵分去指令庫、待辦或筆記。</p></div></header>
+      <form id="inForm" class="capture">
+        <label class="lbl" for="inText" style="margin:0">新增</label>
+        <textarea id="inText" rows="3" placeholder="貼上連結、文字、截錄、想法……"></textarea>
+        <div class="row end"><span class="hint">Enter 儲存 · Shift+Enter 換行</span><button class="btn primary" type="submit">存入 Inbox</button></div>
+      </form>
+      <div id="inList" class="stack"></div>
+    </section>
+
+    <section class="view" id="v-prompts" hidden>
+      <header class="vh"><div><h1>AI 指令庫</h1><p>常用 prompt 按分類存好，搜尋、一撳複製。</p></div><button class="btn primary" data-act="prompt-new">新增指令</button></header>
+      <div class="toolbar"><input id="pQ" type="search" placeholder="搜尋標題、內容或分類" aria-label="搜尋指令"></div>
+      <div id="pCats" class="chips"></div>
+      <div id="pList" class="grid"></div>
+    </section>
+
+    <section class="view" id="v-todos" hidden>
+      <header class="vh"><div><h1>待辦</h1><p>自己開清單、定顏色、排優先次序同到期日。</p></div><button class="btn ghost" data-act="lists-manage">管理清單</button></header>
+      <form id="tForm" class="tadd">
+        <input id="tText" placeholder="加一件要做嘅事…" aria-label="待辦內容" autocomplete="off">
+        <select id="tListSel" aria-label="清單"></select>
+        <select id="tPri" aria-label="優先次序"><option value="1">高</option><option value="2" selected>中</option><option value="3">低</option></select>
+        <input id="tDue" type="date" aria-label="到期日">
+        <button class="btn primary" type="submit">加入</button>
+      </form>
+      <div id="tFilters" class="chips"></div>
+      <div id="tItems"></div>
+    </section>
+
+    <section class="view" id="v-notes" hidden>
+      <header class="vh"><div><h1>筆記</h1><p>自動儲存。可以置頂、加標籤。</p></div></header>
+      <div class="notes" id="notesWrap">
+        <div class="npane">
+          <div class="row" style="flex-wrap:nowrap"><input id="nQ" type="search" placeholder="搜尋筆記" aria-label="搜尋筆記"><button class="btn primary" data-act="note-new">新筆記</button></div>
+          <div id="nList" class="nlist"></div>
+        </div>
+        <div class="neditor" id="nEd"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav class="tabbar" id="tabbar">
+  <button data-view="inbox"><b>收</b>Inbox</button>
+  <button data-view="prompts"><b>令</b>指令</button>
+  <button data-view="todos"><b>辦</b>待辦</button>
+  <button data-view="notes"><b>記</b>筆記</button>
+  <button data-act="skin-pick" aria-label="換主題"><b>彩</b>主題</button>
+</nav>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="blob">
+      <path d="M20 3.5c9.5 0 16.5 6.5 16.5 16S30.5 37 20 37 3.5 29 3.5 19.5 10.5 3.5 20 3.5z" fill="var(--accent)" stroke="var(--edge)" stroke-width="2.5"/>
+      <ellipse cx="14" cy="18" rx="2.4" ry="3" fill="var(--edge)"/>
+      <ellipse cx="26" cy="18" rx="2.4" ry="3" fill="var(--edge)"/>
+      <circle cx="14.8" cy="16.8" r=".9" fill="#FFFFFF"/>
+      <circle cx="26.8" cy="16.8" r=".9" fill="#FFFFFF"/>
+      <path d="M15.5 24.5q4.5 4 9 0" fill="none" stroke="var(--edge)" stroke-width="2.3" stroke-linecap="round"/>
+      <ellipse cx="9.5" cy="23.5" rx="2.6" ry="1.6" fill="#FFFFFF" opacity=".5"/>
+      <ellipse cx="30.5" cy="23.5" rx="2.6" ry="1.6" fill="#FFFFFF" opacity=".5"/>
+      <path d="M20 3.5q2-3 4.5-2" fill="none" stroke="var(--edge)" stroke-width="2" stroke-linecap="round"/>
+    </g>
+  </defs>
+</svg>
+
+<div id="modal" class="overlay" hidden><div class="sheet" role="dialog" aria-modal="true" id="sheet"></div></div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+(function(){
+const COLS=['inbox','prompts','todos','notes','meta'];
+const S={inbox:[],prompts:[],todos:[],notes:[],meta:[]};
+const LKEY='suisau-v1';
+const DEFAULT_LISTS=[{id:'work',name:'工作',color:'blue'},{id:'life',name:'生活',color:'amber'}];
+const COLORS={accent:'青綠',blue:'藍',amber:'琥珀',plum:'紫',red:'紅',slate:'灰'};
+const SKINS=[
+  {id:'fresh', name:'清新（原本）', bg:'#F2F4F1', a:'#0E7A62', s:'#DCEEE7', i:'#18221F'},
+  {id:'candy', name:'糖果粉', bg:'#FFE6F0', a:'#FF4F99', s:'#FFD1E4', i:'#3B1F3A'},
+  {id:'ocean', name:'海洋藍', bg:'#D9F1FF', a:'#1690F5', s:'#C4E6FF', i:'#0E2A47'},
+  {id:'forest',name:'森林綠', bg:'#E4F5D6', a:'#2E9E3A', s:'#CDEEBD', i:'#1F3A1C'},
+  {id:'orange',name:'橙汁', bg:'#FFEFD3', a:'#FF7417', s:'#FFDAB5', i:'#3D2412'},
+  {id:'grape', name:'葡萄紫', bg:'#ECE3FF', a:'#7B45FF', s:'#DCCCFF', i:'#2A1D4A'},
+  {id:'lemon', name:'檸檬黃', bg:'#FFF8C9', a:'#F5B800', s:'#FFEC99', i:'#2F2A10'},
+  {id:'night', name:'星空夜', bg:'#1C1E40', a:'#FFD23F', s:'#3F3F84', i:'#FFF6D6'}
+];
+const SKEY='suisau-skin';
+const MAS='<svg class="mascot" viewBox="0 0 40 40" aria-hidden="true"><use href="#blob"/></svg>';
+let curSkin='fresh';
+function applySkin(id){
+  if(!SKINS.some(s=>s.id===id)) id='fresh';
+  curSkin=id;
+  if(id==='fresh'){document.body.removeAttribute('data-skin');document.body.classList.remove('cartoon')}
+  else{document.body.setAttribute('data-skin',id);document.body.classList.add('cartoon')}
+  try{localStorage.setItem(SKEY,id)}catch(e){}
+  renderSkins();
+}
+function renderSkins(){
+  $('skinRow').innerHTML=SKINS.map(s=>`<button class="skin-dot" data-act="skin" data-skin="${s.id}" title="${s.name}" aria-label="${s.name}" aria-pressed="${curSkin===s.id}" style="--sb:${s.bg};--sa:${s.a}"></button>`).join('');
+  const g=$('skinGrid'); if(g) g.innerHTML=skinCards();
+}
+const skinCards=()=>SKINS.map(s=>`<button class="skin-card" data-act="skin" data-skin="${s.id}" aria-pressed="${curSkin===s.id}" style="--sb:${s.bg};--sa:${s.a};--ss:${s.s};--si:${s.i}"><span>${s.name}</span><span class="bar"></span><span class="bar s"></span></button>`).join('');
+function setSkin(id){
+  applySkin(id);
+  const old=S.meta.find(x=>x.id==='settings')||{};
+  if(old.skin!==id) put('meta',{...old,id:'settings',skin:id});
+}
+let db=null, mode='loading';
+const ui={view:'inbox',pCat:'全部',pQ:'',open:new Set(),tFilter:'all',noteId:null,nQ:'',pendingInbox:null};
+const $=id=>document.getElementById(id);
+
+/* ---------- helpers ---------- */
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const linkify=s=>esc(s).replace(/https?:\/\/[^\s<]+/g,u=>`<a href="${u}" target="_blank" rel="noopener">${u}</a>`);
+const newId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const pad=n=>String(n).padStart(2,'0');
+const dstr=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const today=()=>dstr(new Date());
+const tomorrow=()=>{const d=new Date();d.setDate(d.getDate()+1);return dstr(d)};
+function fmtTime(ts){
+  if(!ts) return '';
+  const d=new Date(ts), t=`${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  if(dstr(d)===today()) return '今日 '+t;
+  const y=new Date();y.setDate(y.getDate()-1);
+  if(dstr(d)===dstr(y)) return '尋日 '+t;
+  return `${d.getMonth()+1}月${d.getDate()}日 ${t}`;
+}
+function fmtDue(due){
+  if(!due) return null;
+  const [y,m,d]=due.split('-').map(Number), t=today();
+  if(due<t) return {cls:'late',txt:`逾期 · ${m}月${d}日`};
+  if(due===t) return {cls:'today',txt:'今日'};
+  if(due===tomorrow()) return {cls:'',txt:'聽日'};
+  return {cls:'',txt:`${m}月${d}日`};
+}
+let toastT;
+function toast(msg){const t=$('toast');t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2200)}
+
+/* ---------- store ---------- */
+function saveLocal(){try{localStorage.setItem(LKEY,JSON.stringify(S))}catch(e){}}
+function loadLocal(){try{const d=JSON.parse(localStorage.getItem(LKEY)||'{}');COLS.forEach(c=>{if(Array.isArray(d[c]))S[c]=d[c]})}catch(e){}}
+const chains={};
+function writeErr(e){
+  if(e&&e.code==='quota_exceeded') toast('儲存空間已滿，請先刪除一啲舊項目');
+  else if(e&&e.code==='invalid_argument') toast('你冇權限修改呢度嘅資料');
+  else toast('儲存失敗，請再試');
+}
+function queue(key,fn){chains[key]=(chains[key]||Promise.resolve()).then(fn).catch(writeErr);return chains[key]}
+function put(col,item){
+  const arr=S[col], i=arr.findIndex(x=>x.id===item.id);
+  if(i>=0) arr[i]=item; else arr.push(item);
+  renderAll();
+  if(db){const body={...item};delete body.id;queue(col+'/'+item.id,()=>db.collection(col).doc(item.id).set(body))}
+  else saveLocal();
+}
+function del(col,id){
+  S[col]=S[col].filter(x=>x.id!==id);
+  renderAll();
+  if(db) queue(col+'/'+id,()=>db.collection(col).doc(id).delete());
+  else saveLocal();
+}
+const getLists=()=>{const m=S.meta.find(x=>x.id==='lists');return (m&&Array.isArray(m.lists)&&m.lists.length)?m.lists:DEFAULT_LISTS};
+const listById=id=>getLists().find(l=>l.id===id)||getLists()[0];
+
+/* ---------- views ---------- */
+function setView(v){
+  ui.view=v;
+  ['inbox','prompts','todos','notes'].forEach(k=>$('v-'+k).hidden=k!==v);
+  document.querySelectorAll('[data-view]').forEach(b=>b.getAttribute('data-view')===v?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current'));
+  try{history.replaceState(null,'','#'+v)}catch(e){}
+  window.scrollTo(0,0);
+}
+function renderAll(){renderNav();renderInbox();renderPrompts();renderTodos();renderNoteList()}
+
+function renderNav(){
+  const st=S.meta.find(x=>x.id==='settings');
+  if(st&&st.skin&&st.skin!==curSkin) applySkin(st.skin);
+  $('c-inbox').textContent=S.inbox.length||'';
+  $('c-prompts').textContent=S.prompts.length||'';
+  const t=today();
+  const due=S.todos.filter(x=>!x.done&&x.due&&x.due<=t).length;
+  $('c-todos').textContent=due?due+' 到期':(S.todos.filter(x=>!x.done).length||'');
+  $('c-notes').textContent=S.notes.length||'';
+  const s=$('sync');
+  if(mode==='cloud') s.innerHTML='<span class="dot on"></span><span>已同步 · 任何裝置打開都見到</span>';
+  else if(mode==='local') s.innerHTML='<span class="dot warn"></span><span>只儲存喺呢個瀏覽器</span>';
+}
+
+function renderInbox(){
+  const items=[...S.inbox].sort((a,b)=>(b.created||0)-(a.created||0));
+  $('inList').innerHTML=items.length?items.map(it=>`
+    <article class="inbox-item">
+      <div class="txt">${linkify(it.text)}</div>
+      <time>${fmtTime(it.created)}</time>
+      <div class="acts">
+        <button class="btn sm" data-act="in-todo" data-id="${it.id}">→ 待辦</button>
+        <button class="btn sm" data-act="in-note" data-id="${it.id}">→ 筆記</button>
+        <button class="btn sm" data-act="in-prompt" data-id="${it.id}">→ 指令</button>
+        <button class="btn sm danger" data-act="in-del" data-id="${it.id}">刪除</button>
+      </div>
+    </article>`).join(''):`<div class="empty">${MAS}${mode==='loading'?'載入中…':'Inbox 清空咗。有新嘢就喺上面打低。'}</div>`;
+}
+
+function catsOf(){
+  const m=new Map();
+  S.prompts.forEach(p=>{const c=p.cat||'未分類';m.set(c,(m.get(c)||0)+1)});
+  return [...m.entries()].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));
+}
+function renderPrompts(){
+  const cats=catsOf(), favs=S.prompts.filter(p=>p.fav).length;
+  if(ui.pCat!=='全部'&&ui.pCat!=='★ 收藏'&&!cats.some(c=>c[0]===ui.pCat)) ui.pCat='全部';
+  const chip=(k,label,n)=>`<button class="chip" data-act="p-cat" data-cat="${esc(k)}" aria-pressed="${ui.pCat===k}">${esc(label)}<i>${n}</i></button>`;
+  $('pCats').innerHTML=chip('全部','全部',S.prompts.length)+(favs?chip('★ 收藏','★ 收藏',favs):'')+cats.map(([c,n])=>chip(c,c,n)).join('');
+  const q=ui.pQ.trim().toLowerCase();
+  let list=S.prompts.filter(p=>{
+    const c=p.cat||'未分類';
+    if(ui.pCat==='★ 收藏'&&!p.fav) return false;
+    if(ui.pCat!=='全部'&&ui.pCat!=='★ 收藏'&&c!==ui.pCat) return false;
+    return !q||(p.title+' '+p.body+' '+c).toLowerCase().includes(q);
+  }).sort((a,b)=>(b.fav?1:0)-(a.fav?1:0)||(b.updated||0)-(a.updated||0));
+  $('pList').innerHTML=list.length?list.map(p=>`
+    <article class="pcard${ui.open.has(p.id)?' open':''}">
+      <header><div class="stack" style="gap:4px"><h3>${esc(p.title||'未命名')}</h3><span><span class="cat">${esc(p.cat||'未分類')}</span></span></div>
+        <button class="star" data-act="p-fav" data-id="${p.id}" aria-pressed="${!!p.fav}" aria-label="收藏">★</button></header>
+      <pre class="pbody">${esc(p.body)}</pre>
+      <footer>
+        <button class="btn sm primary" data-act="p-copy" data-id="${p.id}">複製</button>
+        <button class="btn sm" data-act="p-toggle" data-id="${p.id}">${ui.open.has(p.id)?'收起':'展開'}</button>
+        <button class="btn sm" data-act="p-edit" data-id="${p.id}">編輯</button>
+        <button class="btn sm danger" data-act="p-del" data-id="${p.id}">刪除</button>
+      </footer>
+    </article>`).join(''):`<div class="empty" style="grid-column:1/-1">${MAS}${mode==='loading'?'載入中…':(S.prompts.length?'搵唔到符合嘅指令。':'未有指令。撳「新增指令」加第一條。')}</div>`;
+}
+
+function renderTodos(){
+  const lists=getLists();
+  const sel=$('tListSel'), cur=sel.value;
+  sel.innerHTML=lists.map(l=>`<option value="${esc(l.id)}">${esc(l.name)}</option>`).join('');
+  if(lists.some(l=>l.id===cur)) sel.value=cur;
+  else if(ui.tFilter.startsWith('list:')) sel.value=ui.tFilter.slice(5);
+  const t=today(), open=S.todos.filter(x=>!x.done);
+  const counts={
+    all:open.length,
+    today:open.filter(x=>x.due&&x.due<=t).length,
+    upcoming:open.filter(x=>x.due&&x.due>t).length,
+    nodate:open.filter(x=>!x.due).length
+  };
+  if(ui.tFilter.startsWith('list:')&&!lists.some(l=>'list:'+l.id===ui.tFilter)) ui.tFilter='all';
+  const chip=(k,label,n,sw)=>`<button class="chip" data-act="t-filter" data-f="${esc(k)}" aria-pressed="${ui.tFilter===k}">${sw?`<span class="sw" style="background:var(--${sw})"></span>`:''}${esc(label)}<i>${n}</i></button>`;
+  $('tFilters').innerHTML=chip('all','全部',counts.all)+chip('today','今日及逾期',counts.today)+chip('upcoming','即將',counts.upcoming)+chip('nodate','未排期',counts.nodate)
+    +lists.map(l=>chip('list:'+l.id,l.name,open.filter(x=>(listById(x.list)||{}).id===l.id).length,l.color)).join('');
+  const f=ui.tFilter;
+  const match=x=>{
+    if(f==='today') return x.due&&x.due<=t;
+    if(f==='upcoming') return x.due&&x.due>t;
+    if(f==='nodate') return !x.due;
+    if(f.startsWith('list:')) return (listById(x.list)||{}).id===f.slice(5);
+    return true;
+  };
+  const pending=open.filter(match).sort((a,b)=>(a.pri||2)-(b.pri||2)||((a.due||'9999')<(b.due||'9999')?-1:(a.due||'9999')>(b.due||'9999')?1:0)||(a.created||0)-(b.created||0));
+  const done=S.todos.filter(x=>x.done&&(f.startsWith('list:')?match(x):true)).sort((a,b)=>(b.doneAt||0)-(a.doneAt||0));
+  const row=x=>{
+    const l=listById(x.list), d=fmtDue(x.due), p=x.pri||2;
+    return `<div class="todo${x.done?' done':''}" data-p="${p}">
+      <input type="checkbox" data-act="t-check" data-id="${x.id}" ${x.done?'checked':''} aria-label="完成">
+      <div class="t" data-act="t-edit" data-id="${x.id}">${linkify(x.text)}</div>
+      <span></span>
+      <div class="meta">
+        ${l?`<span><span class="sw" style="background:var(--${l.color})"></span>${esc(l.name)}</span>`:''}
+        ${d?`<span class="${d.cls}">${d.txt}</span>`:''}
+        <span>${p===1?'高':p===3?'低':'中'}優先</span>
+      </div>
+      ${x.note?`<div class="note">${linkify(x.note)}</div>`:''}
+    </div>`;
+  };
+  let html=pending.length?`<div class="stack">${pending.map(row).join('')}</div>`:`<div class="empty">${MAS}${mode==='loading'?'載入中…':'呢度冇未完成嘅事。'}</div>`;
+  if(done.length){
+    html+=`<details class="donebox"${ui.doneOpen?' open':''} id="doneBox"><summary>已完成 ${done.length} 項</summary>
+      <div class="stack">${done.slice(0,40).map(row).join('')}</div>
+      <div class="row" style="margin-top:10px"><button class="btn sm danger" data-act="t-clear">清除所有已完成</button></div></details>`;
+  }
+  $('tItems').innerHTML=html;
+  const db_=$('doneBox'); if(db_) db_.addEventListener('toggle',()=>ui.doneOpen=db_.open);
+}
+
+function sortedNotes(){
+  const q=ui.nQ.trim().toLowerCase();
+  return S.notes.filter(n=>!q||((n.title||'')+' '+(n.body||'')+' '+(n.tag||'')).toLowerCase().includes(q))
+    .sort((a,b)=>(b.pinned?1:0)-(a.pinned?1:0)||(b.updated||0)-(a.updated||0));
+}
+function renderNoteList(){
+  const list=sortedNotes();
+  $('nList').innerHTML=list.length?list.map(n=>{
+    const first=(n.body||'').split('\n').find(s=>s.trim())||'（空白）';
+    return `<button class="nitem" data-act="n-open" data-id="${n.id}" aria-current="${ui.noteId===n.id}">
+      <b>${n.pinned?'<span class="pin">置頂 · </span>':''}${esc(n.title||'未命名筆記')}</b>
+      <small>${esc(n.tag?'#'+n.tag+' · ':'')}${esc(first.slice(0,60))}</small></button>`}).join('')
+    :`<div class="empty">${MAS}${mode==='loading'?'載入中…':(S.notes.length?'搵唔到。':'未有筆記。')}</div>`;
+  if(ui.noteId&&!S.notes.some(n=>n.id===ui.noteId)){ui.noteId=null;renderEditor()}
+  else if(ui.noteId&&!$('nEd').contains(document.activeElement)){
+    // refresh the pin label / time without disturbing typing
+    const n=S.notes.find(x=>x.id===ui.noteId), tm=$('nTime'); if(tm&&n) tm.textContent='更新於 '+fmtTime(n.updated);
+  }
+}
+function renderEditor(){
+  const ed=$('nEd'), n=S.notes.find(x=>x.id===ui.noteId);
+  $('notesWrap').classList.toggle('editing',!!n);
+  if(!n){ed.innerHTML=`<div class="empty" style="margin:auto;border:0">揀左邊一篇筆記，或者開一篇新嘅。</div>`;return}
+  ed.innerHTML=`
+    <div class="row"><button class="btn sm back" data-act="n-back">← 返回</button></div>
+    <input class="ntitle" id="nTitle" placeholder="標題" value="${esc(n.title)}" aria-label="標題">
+    <div class="nmeta">
+      <label for="nTag">標籤</label><input id="nTag" value="${esc(n.tag)}" placeholder="例如：會議">
+      <button class="btn sm" data-act="n-pin">${n.pinned?'取消置頂':'置頂'}</button>
+      <button class="btn sm danger" data-act="n-del">刪除</button>
+      <time id="nTime">更新於 ${fmtTime(n.updated)}</time>
+    </div>
+    <textarea class="nbody" id="nBody" placeholder="開始寫…" aria-label="內容">${esc(n.body)}</textarea>`;
+}
+let noteTimer=null;
+function flushNote(){
+  if(!noteTimer) return; clearTimeout(noteTimer); noteTimer=null;
+  const n=S.notes.find(x=>x.id===ui.noteId); if(!n||!$('nBody')) return;
+  put('notes',{...n,title:$('nTitle').value,tag:$('nTag').value.trim().replace(/^#/,''),body:$('nBody').value,updated:Date.now()});
+}
+function openNote(id){flushNote();ui.noteId=id;renderEditor();renderNoteList()}
+
+/* ---------- modal ---------- */
+function openModal(html){$('sheet').innerHTML=html;$('modal').hidden=false;const f=$('sheet').querySelector('input,textarea,select');if(f)f.focus()}
+function closeModal(){$('modal').hidden=true;$('sheet').innerHTML='';ui.pendingInbox=null}
+function promptForm(p){
+  const cats=catsOf().map(c=>`<option value="${esc(c[0])}">`).join('');
+  openModal(`<form id="mForm" data-kind="prompt" data-id="${p.id||''}">
+    <h2>${p.id?'編輯指令':'新增指令'}</h2>
+    <label class="field"><span>標題</span><input id="mTitle" value="${esc(p.title)}" placeholder="例如：將會議記錄整理成重點" required></label>
+    <label class="field"><span>分類（揀現有或者打新嘅）</span><input id="mCat" list="catList" value="${esc(p.cat)}" placeholder="例如：寫作、翻譯、工作"><datalist id="catList">${cats}</datalist></label>
+    <label class="field"><span>指令內容</span><textarea id="mBody" rows="10" required placeholder="貼上完整 prompt。可以用 [方括號] 標示每次要改嘅位。">${esc(p.body)}</textarea></label>
+    <div class="row end"><button type="button" class="btn ghost" data-act="m-close">取消</button><button class="btn primary" type="submit">儲存</button></div>
+  </form>`);
+}
+function todoForm(x){
+  const lists=getLists();
+  openModal(`<form id="mForm" data-kind="todo" data-id="${x.id}">
+    <h2>編輯待辦</h2>
+    <label class="field"><span>內容</span><input id="mText" value="${esc(x.text)}" required></label>
+    <div class="row" style="flex-wrap:nowrap">
+      <label class="field" style="flex:1"><span>清單</span><select id="mList">${lists.map(l=>`<option value="${esc(l.id)}"${(listById(x.list)||{}).id===l.id?' selected':''}>${esc(l.name)}</option>`).join('')}</select></label>
+      <label class="field" style="flex:1"><span>優先</span><select id="mPri">${[[1,'高'],[2,'中'],[3,'低']].map(([v,l])=>`<option value="${v}"${(x.pri||2)===v?' selected':''}>${l}</option>`).join('')}</select></label>
+    </div>
+    <label class="field"><span>到期日</span><input id="mDue" type="date" value="${esc(x.due)}"></label>
+    <label class="field"><span>備註</span><textarea id="mNote" rows="3">${esc(x.note)}</textarea></label>
+    <div class="row"><button type="button" class="btn danger" data-act="t-del" data-id="${x.id}">刪除</button><span style="flex:1"></span><button type="button" class="btn ghost" data-act="m-close">取消</button><button class="btn primary" type="submit">儲存</button></div>
+  </form>`);
+}
+function listRow(l){
+  return `<div class="lrow" data-lid="${esc(l.id)}">
+    <input class="lname" value="${esc(l.name)}" placeholder="清單名稱" aria-label="清單名稱">
+    <select class="lcolor" aria-label="顏色">${Object.entries(COLORS).map(([k,v])=>`<option value="${k}"${l.color===k?' selected':''}>${v}</option>`).join('')}</select>
+    <button type="button" class="btn sm danger" data-act="l-remove">移除</button></div>`;
+}
+function listsForm(){
+  openModal(`<form id="mForm" data-kind="lists">
+    <h2>管理清單</h2>
+    <p style="margin:-6px 0 14px;color:var(--muted);font-size:13px">改名、換顏色或者加新清單。移除清單時，入面嘅待辦會搬去第一個清單。</p>
+    <div id="lrows">${getLists().map(listRow).join('')}</div>
+    <button type="button" class="btn sm" data-act="l-add" style="margin:4px 0 18px">＋ 加清單</button>
+    <div class="row end"><button type="button" class="btn ghost" data-act="m-close">取消</button><button class="btn primary" type="submit">儲存</button></div>
+  </form>`);
+}
+
+/* ---------- actions ---------- */
+function addInbox(text){
+  text=text.trim(); if(!text) return false;
+  put('inbox',{id:newId(),text,created:Date.now()}); return true;
+}
+function armDelete(btn,fn){
+  if(btn.hasAttribute('data-armed')){fn();return}
+  const old=btn.textContent; btn.setAttribute('data-armed','');btn.textContent='再撳一次確認';
+  setTimeout(()=>{if(btn.isConnected){btn.removeAttribute('data-armed');btn.textContent=old}},3000);
+}
+function copyText(text){
+  let p; try{p=navigator.clipboard.writeText(text)}catch(e){p=Promise.reject(e)}
+  p.then(()=>toast('已複製到剪貼簿')).catch(()=>{
+    openModal(`<h2>手動複製</h2><p style="color:var(--muted);margin-top:-6px">呢個環境唔俾自動複製，已經幫你揀好全文，按 Ctrl+C / ⌘C。</p><textarea id="cpy" rows="10" style="width:100%">${esc(text)}</textarea><div class="row end" style="margin-top:12px"><button class="btn" data-act="m-close">完成</button></div>`);
+    const c=$('cpy'); c.focus(); c.select();
+  });
+}
+
+document.addEventListener('click',e=>{
+  const v=e.target.closest('[data-view]'); if(v){setView(v.getAttribute('data-view'));return}
+  const el=e.target.closest('[data-act]'); if(!el) return;
+  const act=el.getAttribute('data-act'), id=el.getAttribute('data-id');
+  const find=(c)=>S[c].find(x=>x.id===id);
+  switch(act){
+    case 'm-close': closeModal(); break;
+    case 'skin': setSkin(el.getAttribute('data-skin')); toast('已換成「'+SKINS.find(s=>s.id===curSkin).name+'」'); break;
+    case 'skin-pick': openModal(`<h2>揀主題</h2><div class="skin-grid" id="skinGrid">${skinCards()}</div><div class="row end"><button class="btn" data-act="m-close">完成</button></div>`); break;
+    case 'in-del': armDelete(el,()=>del('inbox',id)); break;
+    case 'in-todo': { const it=find('inbox'); if(!it) break;
+      put('todos',{id:newId(),text:it.text.slice(0,500),list:getLists()[0].id,pri:2,due:'',done:false,note:'',created:Date.now()});
+      del('inbox',id); toast('已轉做待辦'); break; }
+    case 'in-note': { const it=find('inbox'); if(!it) break;
+      const first=(it.text.split('\n').find(s=>s.trim())||'').slice(0,40);
+      put('notes',{id:newId(),title:first,body:it.text,tag:'',pinned:false,updated:Date.now()});
+      del('inbox',id); toast('已轉做筆記'); break; }
+    case 'in-prompt': { const it=find('inbox'); if(!it) break;
+      promptForm({title:'',cat:'',body:it.text}); ui.pendingInbox=id; break; }
+    case 'prompt-new': promptForm({title:'',cat:ui.pCat==='全部'||ui.pCat==='★ 收藏'?'':ui.pCat,body:''}); break;
+    case 'p-cat': ui.pCat=el.getAttribute('data-cat'); renderPrompts(); break;
+    case 'p-copy': { const p=find('prompts'); if(p) copyText(p.body); break; }
+    case 'p-toggle': ui.open.has(id)?ui.open.delete(id):ui.open.add(id); renderPrompts(); break;
+    case 'p-fav': { const p=find('prompts'); if(p) put('prompts',{...p,fav:!p.fav}); break; }
+    case 'p-edit': { const p=find('prompts'); if(p) promptForm(p); break; }
+    case 'p-del': armDelete(el,()=>del('prompts',id)); break;
+    case 't-filter': ui.tFilter=el.getAttribute('data-f'); renderTodos(); break;
+    case 't-check': { const x=find('todos'); if(x) put('todos',{...x,done:el.checked,doneAt:el.checked?Date.now():null}); break; }
+    case 't-edit': { const x=find('todos'); if(x) todoForm(x); break; }
+    case 't-del': armDelete(el,()=>{del('todos',id);closeModal()}); break;
+    case 't-clear': armDelete(el,()=>{S.todos.filter(x=>x.done).forEach(x=>del('todos',x.id));toast('已清除')}); break;
+    case 'lists-manage': listsForm(); break;
+    case 'l-add': $('lrows').insertAdjacentHTML('beforeend',listRow({id:'l'+newId(),name:'',color:'accent'})); $('lrows').lastElementChild.querySelector('input').focus(); break;
+    case 'l-remove': if($('lrows').children.length>1) el.closest('.lrow').remove(); else toast('最少要有一個清單'); break;
+    case 'note-new': { const n={id:newId(),title:'',body:'',tag:'',pinned:false,updated:Date.now()}; flushNote(); put('notes',n); ui.nQ='';$('nQ').value=''; openNote(n.id); $('nTitle').focus(); break; }
+    case 'n-open': openNote(id); break;
+    case 'n-back': flushNote(); ui.noteId=null; renderEditor(); renderNoteList(); break;
+    case 'n-pin': { flushNote(); const n=S.notes.find(x=>x.id===ui.noteId); if(n){put('notes',{...n,pinned:!n.pinned});el.textContent=n.pinned?'置頂':'取消置頂'} break; }
+    case 'n-del': armDelete(el,()=>{const nid=ui.noteId;clearTimeout(noteTimer);noteTimer=null;ui.noteId=null;del('notes',nid);renderEditor()}); break;
+  }
+});
+$('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('modal').hidden)closeModal()});
+
+document.addEventListener('submit',e=>{
+  const f=e.target; e.preventDefault();
+  if(f.id==='inForm'){ if(addInbox($('inText').value)){$('inText').value='';toast('已存入 Inbox')} return }
+  if(f.id==='qc'){ if(addInbox($('qcIn').value)){$('qcIn').value='';toast('已存入 Inbox')} return }
+  if(f.id==='tForm'){
+    const text=$('tText').value.trim(); if(!text) return;
+    put('todos',{id:newId(),text,list:$('tListSel').value,pri:+$('tPri').value,due:$('tDue').value,done:false,note:'',created:Date.now()});
+    $('tText').value='';$('tDue').value='';$('tText').focus(); return;
+  }
+  if(f.id!=='mForm') return;
+  const kind=f.getAttribute('data-kind'), id=f.getAttribute('data-id');
+  if(kind==='prompt'){
+    const old=S.prompts.find(x=>x.id===id)||{};
+    put('prompts',{...old,id:id||newId(),title:$('mTitle').value.trim(),cat:$('mCat').value.trim()||'未分類',body:$('mBody').value,fav:!!old.fav,created:old.created||Date.now(),updated:Date.now()});
+    if(ui.pendingInbox) del('inbox',ui.pendingInbox);
+    toast(id?'已更新':'已加入指令庫');
+  } else if(kind==='todo'){
+    const old=S.todos.find(x=>x.id===id); if(old) put('todos',{...old,text:$('mText').value.trim()||old.text,list:$('mList').value,pri:+$('mPri').value,due:$('mDue').value,note:$('mNote').value});
+  } else if(kind==='lists'){
+    const lists=[...f.querySelectorAll('.lrow')].map(r=>({id:r.getAttribute('data-lid'),name:r.querySelector('.lname').value.trim(),color:r.querySelector('.lcolor').value})).filter(l=>l.name);
+    if(!lists.length){toast('最少要有一個有名嘅清單');return}
+    const ids=new Set(lists.map(l=>l.id));
+    put('meta',{id:'lists',lists});
+    S.todos.filter(x=>!ids.has(x.list)).forEach(x=>put('todos',{...x,list:lists[0].id}));
+    if(ui.tFilter.startsWith('list:')&&!ids.has(ui.tFilter.slice(5))) ui.tFilter='all';
+    renderTodos(); toast('清單已更新');
+  }
+  closeModal();
+});
+
+// Enter to save (IME-safe) for capture boxes
+['inText','qcIn'].forEach(idn=>$(idn).addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing&&e.keyCode!==229){e.preventDefault();$(idn).form.requestSubmit()}
+}));
+$('pQ').addEventListener('input',e=>{ui.pQ=e.target.value;renderPrompts()});
+$('nQ').addEventListener('input',e=>{ui.nQ=e.target.value;renderNoteList()});
+$('nEd').addEventListener('input',e=>{
+  if(!['nTitle','nTag','nBody'].includes(e.target.id)) return;
+  clearTimeout(noteTimer); noteTimer=setTimeout(()=>{noteTimer=1;flushNote()},600);
+});
+$('nEd').addEventListener('focusout',()=>{if(noteTimer)flushNote()});
+window.addEventListener('pagehide',flushNote);
+
+/* ---------- boot ---------- */
+try{applySkin(localStorage.getItem(SKEY)||'fresh')}catch(e){applySkin('fresh')}
+const h=(location.hash||'').slice(1);
+setView(['inbox','prompts','todos','notes'].includes(h)?h:'inbox');
+renderAll(); renderEditor();
+
+(async()=>{
+  let d=null;
+  try{ if(window.claude&&window.claude.use) d=await window.claude.use('db') }catch(e){}
+  if(!d){ mode='local'; loadLocal(); renderAll(); return }
+  db=d; mode='cloud';
+  COLS.forEach(c=>{
+    db.collection(c).onSnapshot(snap=>{
+      S[c]=snap.docs.map(x=>({...x.data(),id:x.id}));
+      renderAll();
+    },err=>{ if(err&&err.code!=='revoked') toast('同步中斷，請重新載入頁面') });
+  });
+  renderAll();
+})();
+})();
+</script>
+</body>
+</html>
